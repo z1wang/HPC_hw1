@@ -192,11 +192,13 @@ int main( int argc, char *argv[])
         index = index + size;
       }
       double ie = residue(N, result);
+      free(result);
       printf("residue is %f.\n", ie);
     }else{
       MPI_Send(init, size, MPI_DOUBLE, 0, 999999, MPI_COMM_WORLD);
     }
   }
+  free(init);
   
   MPI_Finalize();
 

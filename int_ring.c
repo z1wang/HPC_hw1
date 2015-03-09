@@ -7,7 +7,6 @@
 
 
 /*The commented code is used for sending arrays*/
-
 int main( int argc, char *argv[])
 {
 
