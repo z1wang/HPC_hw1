@@ -5,6 +5,8 @@
 #include <math.h>
 #include "util.h"
 
+//This program is for iteration less than 999999 because of final tag
+//The output is the final residual
 double residue(int n, double* u){
   double res = 0;
   int s = n - 1;
@@ -103,8 +105,6 @@ int main( int argc, char *argv[])
 //initial vector
   double * init = malloc(sizeof(double) * (size + 2));
 
-//Protocal: init[size] stores value from next process
-  //init[size + 1] stores value from previous process
   while(it > 0){
     if(it == F){
       double unit = (N + 1) * (N + 1);
@@ -188,13 +188,13 @@ int main( int argc, char *argv[])
       }
       int index = size;
       for(j = 1; j < nprocs; j++){
-        MPI_Recv(&result[index],  size, MPI_DOUBLE, j, 99999, MPI_COMM_WORLD, &status);
+        MPI_Recv(&result[index],  size, MPI_DOUBLE, j, 999999, MPI_COMM_WORLD, &status);
         index = index + size;
       }
       double ie = residue(N, result);
       printf("residue is %f.\n", ie);
     }else{
-      MPI_Send(init, size, MPI_DOUBLE, 0, 99999, MPI_COMM_WORLD);
+      MPI_Send(init, size, MPI_DOUBLE, 0, 999999, MPI_COMM_WORLD);
     }
   }
   
