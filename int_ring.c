@@ -5,13 +5,16 @@
 #include "util.h"
 #define SIZE 250000
 
+
+/*The commented code is used for sending arrays*/
+
 int main( int argc, char *argv[])
 {
+
   if (argc != 2) {
     fprintf(stderr, "I need exactly 1 parameter, what's wrong with you!\n");
     abort();
   }
-
 
   int N = atoi(argv[1]);
   int it = N;
@@ -29,9 +32,7 @@ int main( int argc, char *argv[])
     abort();
   }
 
-
   tag = it;
-
   int message_out;
   int message_in;
 /*  double* in = malloc(sizeof(double) * SIZE);
@@ -93,12 +94,6 @@ int main( int argc, char *argv[])
       double elapsed = timestamp_diff_in_seconds(time1,time2);
       printf("Time elapsed is %f seconds.\n", elapsed);
     }*/
-
-
-  
-
-
- 
 
   MPI_Finalize();
 

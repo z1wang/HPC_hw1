@@ -5,7 +5,7 @@
 #include <math.h>
 #include "util.h"
 
-/*double residue(int n, double* u){
+double residue(int n, double* u){
   double res = 0;
   int s = n - 1;
 
@@ -30,9 +30,9 @@
   }
   free(temp);
   res = sqrt(res);
-  printf("residue is %f\n", res);
+//  printf("residue is %f\n", res);
   return res;
-}*/
+}
 
 double * jacobi(int n, int size, double * init){
   double *ret = malloc(sizeof(double) * (size + 2));
@@ -166,13 +166,38 @@ int main( int argc, char *argv[])
     }
   }
 
-  if(rank == 0 && it == 0){
-    get_timestamp(&time2);
-    double elapsed = timestamp_diff_in_seconds(time1,time2);
-    printf("Time elapsed is %f seconds.\n", elapsed);
+/* This part is used to verify the final result is correct
+   It prints out the result vector from each processor
+   It has been commented */
+
+/* if (it == 0){
+  printf(Rank is %d:\n, rank);
+  int j;
+  for(j = 0; j < size; j++){
+    printf("%f ", init[j]);
+  }
+  printf("\n");
+}
+*/
+  if(it == 0){
+    if(rank == 0){
+      double * result = malloc(sizeof(double) * N);
+      int j;
+      for (j = 0; j < size; j++){
+       result[j] = init[j];
+      }
+      int index = size;
+      for(j = 1; j < nprocs; j++){
+        MPI_Recv(&result[index],  size, MPI_DOUBLE, j, 99999, MPI_COMM_WORLD, &status);
+        index = index + size;
+      }
+      double ie = residue(N, result);
+      printf("residue is %f.\n", ie);
+    }else{
+      MPI_Send(init, size, MPI_DOUBLE, 0, 99999, MPI_COMM_WORLD);
+    }
   }
   
-
   MPI_Finalize();
 
   return 0;
